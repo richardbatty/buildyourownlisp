@@ -1,7 +1,7 @@
 CC=cc
 CFLAGS=-std=c99 -Wall
-LFLAGS = -ledit -o
-DEPS = parsing.c
+LFLAGS = -ledit -lm -o
+DEPS = parsing.c lib/mpc/mpc.c
 OBJ = parsing.o
 
 all: build run
