@@ -1,7 +1,7 @@
 CC=cc
 CFLAGS=-std=c99 -Wall
 LFLAGS = -ledit -lm -o
-DEPS = parsing.c lib/mpc/mpc.c
+DEPS = src/eval.c src/parsing.c lib/mpc/mpc.c
 OBJ = parsing.o
 TEST_DEPS = tests/test.c
 TEST_OBJ = tests.o
