@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "lib/mpc/mpc.h"
 
@@ -26,6 +27,56 @@ void add_history(char* unused) {}
 #else
 #include <editline/readline.h>
 #endif
+
+/* Use operator string to see which operation to perform */
+long calculate(long x, char* op, long y) {
+  if (strcmp(op, "+") == 0) { return x + y; }
+  if (strcmp(op, "-") == 0) { return x - y; }
+  if (strcmp(op, "*") == 0) { return x * y; }
+  if (strcmp(op, "/") == 0) { return x / y; }
+  return 0;
+}
+
+bool node_is_type(mpc_ast_t* ast_node, char* type) {
+  return (strstr(ast_node->tag, type)) ? 1 : 0;
+}
+
+char* operator(mpc_ast_t* ast_node) {
+  /* The operator is always second child. */
+  return ast_node->children[1]->contents;
+}
+
+mpc_ast_t* nth_child(mpc_ast_t* ast_node, int n) {
+  return ast_node->children[n];
+}
+
+char* contents(mpc_ast_t* ast_node) {
+  return ast_node->contents;
+}
+
+long eval(mpc_ast_t* ast_node) {
+
+  /* If tagged as number return it directly. */
+  if (node_is_type(ast_node, "number")) {
+    return atoi(contents(ast_node));
+  }
+
+  char* op = operator(ast_node);
+
+  /* We store the third child in `result` */
+  long result = eval(nth_child(ast_node, 2));
+
+  /* Iterate the remaining children and combining. */
+  int i = 3;
+  while (node_is_type(nth_child(ast_node, i), "expr")) {
+    result = calculate(result,
+                       op,
+                       eval(nth_child(ast_node, i)));
+    i++;
+  }
+
+  return result;
+}
 
 int main(int argc, char** argv) {
 
@@ -55,7 +106,8 @@ int main(int argc, char** argv) {
     add_history(input);
     mpc_result_t r;
     if (mpc_parse("<stdin>", input, Lispy, &r)) {
-      mpc_ast_print(r.output);
+      long result = eval(r.output);
+      printf("%li\n", result);
       mpc_ast_delete(r.output);
     } else {
       mpc_err_print(r.error);
