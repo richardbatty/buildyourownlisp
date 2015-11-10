@@ -1,0 +1,19 @@
+#include <stdlib.h>
+
+#include "../src/interpreter.h"
+
+#test basic_maths
+ck_assert_str_eq(interpret("+ 1 1"), "2");
+ck_assert_str_eq(interpret("- 5 12"), "-7");
+ck_assert_str_eq(interpret("/ 4 2"), "2");
+ck_assert_str_eq(interpret("/ 5 2"), "2");
+ck_assert_str_eq(interpret("* 20 10"), "200");
+ck_assert_str_eq(interpret("* ( - 20 ) ( - 10 )"), "200");
+
+#test nested_expressions
+ck_assert_str_eq(interpret("+ 1 ( - 2 1 )"), "2");
+
+#test erroneous_expressions
+ck_assert(strstr(interpret("+ "), "error: expected whitespace, '-' or one or more of one or more of one of '0123456789' or '(' at end of input"));
+ck_assert(strstr(interpret("1 "), "error: expected whitespace, '+', '-', '*', '/', '%', '^' or 'm' at '1'"));
+ck_assert(strstr(interpret("()"), "error: expected whitespace, '+', '-', '*', '/', '%', '^' or 'm' at '('"));

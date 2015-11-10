@@ -1,6 +1,5 @@
 #include <stdbool.h>
 
-#include "eval.h"
 #include "../lib/mpc/mpc.h"
 
 /* Use operator string to see which operation to perform */
