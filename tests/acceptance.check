@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "../src/interpreter.h"
+#include "../src/interpreter/interpreter.h"
 
 #test basic_maths
 ck_assert_str_eq(interpret("+ 1 1"), "2");

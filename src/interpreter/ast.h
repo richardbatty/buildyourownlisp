@@ -1,6 +1,6 @@
 #include <stdbool.h>
 
-#include "../lib/mpc/mpc.h"
+#include "../../lib/mpc/mpc.h"
 
 #ifndef NODE_IS_TYPE_H_
 #define NODE_IS_TYPE_H_

@@ -8,7 +8,7 @@
 #line 1 "tests/acceptance.check"
 #include <stdlib.h>
 
-#include "../src/interpreter.h"
+#include "../src/interpreter/interpreter.h"
 
 START_TEST(basic_maths)
 {

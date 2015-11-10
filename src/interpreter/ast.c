@@ -1,6 +1,6 @@
 #include <stdbool.h>
 
-#include "../lib/mpc/mpc.h"
+#include "../../lib/mpc/mpc.h"
 
 bool node_is_type(mpc_ast_t* ast_node, char* type) {
   return (strstr(ast_node->tag, type)) ? 1 : 0;

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <editline/readline.h>
 
-#include "interpreter.h"
+#include "interpreter/interpreter.h"
 
 int main(int argc, char** argv) {
   puts("Lispy Version 0.0.0.0.1");

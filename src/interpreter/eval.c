@@ -1,4 +1,4 @@
-#include "../lib/mpc/mpc.h"
+#include "../../lib/mpc/mpc.h"
 #include "ast.h"
 
 /* Use operator string to see which operation to perform */
