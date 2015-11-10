@@ -1,6 +1,5 @@
-#include <stdbool.h>
-
 #include "../lib/mpc/mpc.h"
+#include "ast.h"
 
 /* Use operator string to see which operation to perform */
 long calculate(long x, char* op, long y) {
@@ -19,24 +18,6 @@ long calculate_unary(char* op, long x) {
   if (strcmp(op, "-") == 0) { return - x; }
   return 0;
 }
-
-bool node_is_type(mpc_ast_t* ast_node, char* type) {
-  return (strstr(ast_node->tag, type)) ? 1 : 0;
-}
-
-char* operator(mpc_ast_t* ast_node) {
-  /* The operator is always second child. */
-  return ast_node->children[1]->contents;
-}
-
-mpc_ast_t* nth_child(mpc_ast_t* ast_node, int n) {
-  return ast_node->children[n];
-}
-
-char* contents(mpc_ast_t* ast_node) {
-  return ast_node->contents;
-}
-
 
 long eval(mpc_ast_t* ast_node) {
 

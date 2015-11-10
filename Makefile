@@ -1,7 +1,7 @@
 CC=cc
 CFLAGS=-std=c99 -Wall
 LFLAGS = -ledit -lm
-LIB = src/interpreter.c src/eval.c src/parser.c lib/mpc/mpc.c
+LIB = src/interpreter.c src/eval.c src/ast.c src/parser.c lib/mpc/mpc.c
 MAIN = src/main.c
 OBJ = parsing.o
 TEST = tests/acceptance.c
