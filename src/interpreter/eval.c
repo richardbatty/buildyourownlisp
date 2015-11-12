@@ -1,29 +1,39 @@
 #include "../../lib/mpc/mpc.h"
 #include "ast.h"
+#include "errors.h"
 
 /* Use operator string to see which operation to perform */
-long calculate(long x, char* op, long y) {
-  if (strcmp(op, "+") == 0) { return x + y; }
-  if (strcmp(op, "-") == 0) { return x - y; }
-  if (strcmp(op, "*") == 0) { return x * y; }
-  if (strcmp(op, "/") == 0) { return x / y; }
-  if (strcmp(op, "%") == 0) { return x % y; }
-  if (strcmp(op, "^") == 0) { return pow(x, y); }
-  if (strcmp(op, "min") == 0) { return fmin(x, y); }
-  if (strcmp(op, "max") == 0) { return fmax(x, y); }
-  return 0;
+lisp_value calculate(lisp_value x, char* op, lisp_value y) {
+  if (x.type == LISP_VALUE_ERR) { return x; }
+  if (y.type == LISP_VALUE_ERR) { return y; }
+
+  if (strcmp(op, "+") == 0) { return lisp_value_num(x.num + y.num); }
+  if (strcmp(op, "-") == 0) { return lisp_value_num(x.num - y.num); }
+  if (strcmp(op, "*") == 0) { return lisp_value_num(x.num * y.num); }
+  if (strcmp(op, "/") == 0) {
+    return y.num == 0
+      ? lisp_value_err(LERR_DIV_ZERO)
+      : lisp_value_num(x.num / y.num);
+    }
+  if (strcmp(op, "%") == 0) { return lisp_value_num(x.num % y.num); }
+  if (strcmp(op, "^") == 0) { return lisp_value_num(pow(x.num, y.num)); }
+  if (strcmp(op, "min") == 0) { return lisp_value_num(fmin(x.num, y.num)); }
+  if (strcmp(op, "max.num") == 0) { return lisp_value_num(fmax(x.num, y.num)); }
+  return lisp_value_err(LERR_BAD_OP);
 }
 
-long calculate_unary(char* op, long x) {
-  if (strcmp(op, "-") == 0) { return - x; }
-  return 0;
+lisp_value calculate_unary(char* op, lisp_value x) {
+  if (strcmp(op, "-") == 0) { return lisp_value_num(- x.num); }
+  return lisp_value_err(LERR_BAD_OP);
 }
 
-long eval(mpc_ast_t* ast_node) {
+lisp_value eval(mpc_ast_t* ast_node) {
 
   /* If tagged as number return it directly. */
   if (node_is_type(ast_node, "number")) {
-    return atoi(contents(ast_node));
+    errno = 0;
+    long x = strtol(contents(ast_node), NULL, 10);
+    return errno != ERANGE ? lisp_value_num(x) : lisp_value_err(LERR_BAD_NUM);
   }
 
   char* op = operator(ast_node);
@@ -31,7 +41,7 @@ long eval(mpc_ast_t* ast_node) {
   /* TODO: Create an array of operands to manipulate rather than
   the awkward off-by-one ast node once I know more about pointers */
   /* We store the third child in `result` */
-  long result = eval(nth_child(ast_node, 2));
+  lisp_value result = eval(nth_child(ast_node, 2));
 
   if (!node_is_type(nth_child(ast_node, 3), "expr")) {
     result = calculate_unary(op, result);

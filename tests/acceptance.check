@@ -17,3 +17,6 @@ ck_assert_str_eq(interpret("+ 1 ( - 2 1 )"), "2");
 ck_assert(strstr(interpret("+ "), "error: expected whitespace, '-' or one or more of one or more of one of '0123456789' or '(' at end of input"));
 ck_assert(strstr(interpret("1 "), "error: expected whitespace, '+', '-', '*', '/', '%', '^' or 'm' at '1'"));
 ck_assert(strstr(interpret("()"), "error: expected whitespace, '+', '-', '*', '/', '%', '^' or 'm' at '('"));
+
+# test div_by_zero_error_handling
+ck_assert_str_eq(interpret("/ 10 0"), "Error: Division by zero!");

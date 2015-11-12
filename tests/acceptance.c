@@ -37,6 +37,14 @@ START_TEST(erroneous_expressions)
 ck_assert(strstr(interpret("+ "), "error: expected whitespace, '-' or one or more of one or more of one of '0123456789' or '(' at end of input"));
 ck_assert(strstr(interpret("1 "), "error: expected whitespace, '+', '-', '*', '/', '%', '^' or 'm' at '1'"));
 ck_assert(strstr(interpret("()"), "error: expected whitespace, '+', '-', '*', '/', '%', '^' or 'm' at '('"));
+
+}
+END_TEST
+
+START_TEST(div_by_zero_error_handling)
+{
+#line 22
+ck_assert_str_eq(interpret("/ 10 0"), "Error: Division by zero!");
 }
 END_TEST
 
@@ -51,6 +59,7 @@ int main(void)
     tcase_add_test(tc1_1, basic_maths);
     tcase_add_test(tc1_1, nested_expressions);
     tcase_add_test(tc1_1, erroneous_expressions);
+    tcase_add_test(tc1_1, div_by_zero_error_handling);
 
     srunner_run_all(sr, CK_ENV);
     nf = srunner_ntests_failed(sr);

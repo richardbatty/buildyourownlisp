@@ -9,8 +9,8 @@ char* interpret(char* input) {
   mpc_result_t r;
   char* result_string = malloc(100);
   if (parse(input, &r)) {
-    long result = eval(r.output);
-    snprintf(result_string, 100, "%ld", result);
+    lisp_value result = eval(r.output);
+    result_string = lisp_value_print(result);
     mpc_ast_delete(r.output);
   } else {
     result_string = mpc_err_string(r.error);
